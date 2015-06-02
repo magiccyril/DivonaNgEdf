@@ -2,7 +2,7 @@
   "name": "divona-ngEdf",
   "version": "0.0.1",
   "main": [
-    "lib/edj.js",
+    "lib/edf.js",
     "lib/ejp.js",
     "lib/forecast.js",
     "lib/tempo.js"
