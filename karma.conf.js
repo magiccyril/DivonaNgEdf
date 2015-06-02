@@ -19,11 +19,11 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/moment/moment.js',
       'moment.config.js',
-      'edf.js',
-      'ejp.js',
-      'forecast.js',
-      'tempo.js',
-      '*.spec.js'
+      'lib/edf.js',
+      'lib/ejp.js',
+      'lib/forecast.js',
+      'lib/tempo.js',
+      'lib/*.spec.js'
     ],
 
 

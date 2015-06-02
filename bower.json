@@ -2,10 +2,10 @@
   "name": "divona-ngEdf",
   "version": "0.0.1",
   "main": [
-    "edj.js",
-    "ejp.js",
-    "forecast.js",
-    "tempo.js"
+    "lib/edj.js",
+    "lib/ejp.js",
+    "lib/forecast.js",
+    "lib/tempo.js"
   ],
   "ignore": [
     "docker-compose.yml",
