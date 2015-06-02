@@ -1,0 +1,23 @@
+{
+  "name": "divona-ngEdf",
+  "version": "0.0.1",
+  "main": [
+    "edj.js",
+    "ejp.js",
+    "forecast.js",
+    "tempo.js"
+  ],
+  "ignore": [
+    "docker-compose.yml",
+    "docker-entrypoint.sh",
+    "Dockerfile"
+  ],
+  "dependencies": {
+    "angular": "~1.3.15",
+    "moment": "^2.8.3"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.3.15"
+  },
+  "private": true
+}
