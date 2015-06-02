@@ -9,111 +9,50 @@
  */
 angular
   .module('divonaNgEdf')
-  .factory('divonaNgEdf.Forecast', ['$http', '$q', 'FORECAST_API_URL',
-    function ($http, $q, API_URL) {
-      var formatTempoData = function (data) {
-        switch (data) {
-          case 'blue':
-            return 'Bleu';
+  .factory('divonaNgEdf.Forecast', ['$http', '$q', 'FORECAST_API_URL', 'divonaNgEdf.Tempo', 'divonaNgEdf.Ejp',
+    function ($http, $q, API_URL, Tempo, Ejp) {
 
-          case 'white':
-            return 'Blanc';
+      var formatTempo = function (data) {
+        return {
+          raw: data.color,
+          format: Tempo.formatColor(data.color)
+        };
+      };
 
-          case 'red':
-            return 'Rouge';
+      var formatEjpZone = function (data) {
+        return {
+          raw: data,
+          format: Ejp.format(data)
         }
       };
 
-      var fetch = function () {
-        return $http.get(API_URL)
-          .then(function (response) {
-            var data = response.data;
-
-            var formatedData = {
-              'today': {
-                'tempo': null,
-                'ejp': {
-                  'north': null,
-                  'paca': null,
-                  'west': null,
-                  'south': null
-                }
-              },
-              'tomorrow': {
-                'tempo': null,
-                'ejp': {
-                  'north': null,
-                  'paca': null,
-                  'west': null,
-                  'south': null
-                }
-              }
-            };
-
-            if (data.today && data.today.tempo) {
-              formatedData.today.tempo = {
-                raw: data.today.tempo.color,
-                format: formatTempoData(data.today.tempo.color)
-              };
-            }
-
-            if (data.today && data.today.ejp) {
-              formatedData.today.ejp.north = {
-                raw: data.today.ejp.zones.north,
-                format: data.today.ejp.zones.north ? 'EJP' : 'non EJP'
-              };
-
-              formatedData.today.ejp.paca = {
-                raw: data.today.ejp.zones.paca,
-                format: data.today.ejp.zones.paca ? 'EJP' : 'non EJP'
-              };
-
-              formatedData.today.ejp.west = {
-                raw: data.today.ejp.zones.west,
-                format: data.today.ejp.zones.west ? 'EJP' : 'non EJP'
-              };
-
-              formatedData.today.ejp.south = {
-                raw: data.today.ejp.zones.south,
-                format: data.today.ejp.zones.south ? 'EJP' : 'non EJP'
-              };
-            }
-
-            if (data.tomorrow && data.tomorrow.tempo) {
-              formatedData.tomorrow.tempo = {
-                raw: data.tomorrow.tempo.color,
-                format: formatTempoData(data.tomorrow.tempo.color)
-              };
-            }
-
-            if (data.tomorrow && data.tomorrow.ejp) {
-              formatedData.tomorrow.ejp.north = {
-                raw: data.tomorrow.ejp.zones.north,
-                format: data.tomorrow.ejp.zones.north ? 'EJP' : 'non EJP'
-              };
-
-              formatedData.tomorrow.ejp.paca = {
-                raw: data.tomorrow.ejp.zones.paca,
-                format: data.tomorrow.ejp.zones.paca ? 'EJP' : 'non EJP'
-              };
-
-              formatedData.tomorrow.ejp.west = {
-                raw: data.tomorrow.ejp.zones.west,
-                format: data.tomorrow.ejp.zones.west ? 'EJP' : 'non EJP'
-              };
-
-              formatedData.tomorrow.ejp.south = {
-                raw: data.tomorrow.ejp.zones.south,
-                format: data.tomorrow.ejp.zones.south ? 'EJP' : 'non EJP'
-              };
-            }
-
-            return formatedData;
-          });
+      var formatEjp = function (data) {
+        return {
+          'north': formatEjpZone(data.zones.north),
+          'paca': formatEjpZone(data.zones.paca),
+          'west': formatEjpZone(data.zones.west),
+          'south': formatEjpZone(data.zones.south)
+        };
       };
 
       return {
-        'fetch': fetch
+        'fetch': function () {
+          return $http.get(API_URL + '?' + moment().unix())
+            .then(function (response) {
+              var data = response.data;
+
+              return {
+                'today': {
+                  'tempo': (data.today && data.today.tempo) ? formatTempo(data.today.tempo) : null,
+                  'ejp': (data.today && data.today.ejp) ? formatEjp(data.today.ejp) : null
+                },
+                'tomorrow': {
+                  'tempo': (data.tomorrow && data.tomorrow.tempo) ? formatTempo(data.tomorrow.tempo) : null,
+                  'ejp': (data.tomorrow && data.tomorrow.ejp) ? formatEjp(data.tomorrow.ejp) : null
+                }
+              };
+            });
+        }
       };
     }
   ]);
